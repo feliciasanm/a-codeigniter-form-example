@@ -40,10 +40,13 @@ class Aspirasi extends CI_Controller {
 		if ($this->form_validation->run() === FALSE || $upload_error_exists) {
 
 			$data['title'] = 'Form Aspirasi';
-					
+
 			if ($upload_attempt_exists && !$upload_error_exists) {
 				unlink($config['upload_path'] . $this->upload->data('file_name'));
 			}
+
+			$data['has_submitted_form'] = $this->input->method() === 'post';
+	
 			$this->load->view('aspirasi', $data);
 
 		} else {
