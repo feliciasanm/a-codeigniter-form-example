@@ -20,15 +20,37 @@ class Aspirasi extends CI_Controller {
 		$this->form_validation->set_message('required', 'Kolom {field} wajib diisi');
 		$this->form_validation->set_message('regex_match', 'Format {field} tidak sesuai, pastikan {field} telah diisi dengan benar');	
 
-		if ($this->form_validation->run() === FALSE) {
+		$config['upload_path']		 	= './file_aspirasi/';
+		$config['allowed_types'] 		= 'jpg|png|zip|rar';
+		$config['file_ext_tolower'] 	= TRUE;
+		$config['max_size'] 			= 2048;
+		$config['encrypt_name'] 		= TRUE;
+
+		$this->load->library('upload', $config);
+		$this->load->helper('file');
+
+		// Check if there is upload. If there is, check if there is upload error.
+		$upload_attempt_exists = !empty($_FILES['file_aspirasi']['name']);
+		$upload_error_exists = $upload_attempt_exists && $this->upload->do_upload('file_aspirasi') === FALSE;
+
+		if ($upload_error_exists) {
+			$data['upload_errors'] = $this->upload->display_errors();
+		}		
+
+		if ($this->form_validation->run() === FALSE || $upload_error_exists) {
 
 			$data['title'] = 'Form Aspirasi';
+					
+			if ($upload_attempt_exists && !$upload_error_exists) {
+				unlink($config['upload_path'] . $this->upload->data('file_name'));
+			}
 			$this->load->view('aspirasi', $data);
 
 		} else {
 
 			$data['title'] = 'Form Aspirasi - Sukses';
-			$this->aspirasi_model->set_aspirasi();
+
+			$this->aspirasi_model->set_aspirasi($this->upload->data('file_name'));
 			$this->load->view('success', $data);
 
 		}
