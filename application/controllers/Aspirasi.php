@@ -23,6 +23,8 @@ class Aspirasi extends CI_Controller {
 		if ($this->form_validation->run() === FALSE) {
 
 			$data['title'] = 'Form Aspirasi';
+			$data['has_submitted_form'] = $this->input->method() === 'post';
+	
 			$this->load->view('aspirasi', $data);
 
 		} else {
