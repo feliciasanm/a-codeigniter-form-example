@@ -12,7 +12,7 @@
 		<main id="rectangle-wrapper">
 			<div id="rectangle-container">
 				<?php
-					echo form_open('aspirasi/form');
+					echo form_open_multipart('aspirasi/form');
 				?>
 					<div class="form-wrapper">
 						<h1 class="mb-4">Form Aspirasi</h1>
@@ -30,6 +30,16 @@
 						<div class="form-group">
 							<label for="aspirasi">Aspirasi</label>
 							<textarea class="form-control" id="aspirasi" name="aspirasi" value="<?php echo set_value('aspirasi'); ?>" required><?php echo set_value('aspirasi'); ?></textarea>
+						</div>
+						<div class="form-group">
+							<label for="file-upload">File tambahan</label>
+							<?php if (isset($upload_errors)) {
+								echo '<div class="text-danger">' . $upload_errors . '</div>';
+							} ?>
+							<input type="file" class="form-control-file" id="file-upload" name="file_aspirasi" accept=".jpg, .png, .zip, .rar" aria-describedby="file-upload-text">
+							<div class="form-text text-muted" id="file-upload-text">
+								Kamu juga dapat mengunggah file tambahan berupa gambar (.jpg, .png) atau archive (.zip, .rar).
+							</div> 
 						</div>
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
